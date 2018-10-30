@@ -10,13 +10,14 @@
       <ul class="todo-list" id="">
         <li class="todo" v-for="todo in filteredTodos" :class="{ completed: todo.completed }" :key="todo.id">
           <div class="view">
-          <input type="checkbox" v-model="todo.completed" class="toggle"> 
-          <label>{{ todo.name }}</label>
+          <input type="checkbox" v-model="todo.completed"  @click='completeTodo' class="toggle"> 
+          <label>{{ todo.id }} {{ todo.name }}</label>
             <button class="destroy" @click.prevent="deleteTodo(todo)"></button>
             </div>
         </li> 
       </ul>
     </div>
+    
     <footer class="footer" >  
       <!-- v-show="hasTodos" -->
       <span class="todo-count"><strong>{{ remaining }}</strong> Commande (s) </span>
@@ -33,29 +34,37 @@
 export default {
   data() {
     return {
-      el: "#v-for-todos",
+      currentTodoId: 1,
+      el: "",
       todos: [
         {
-          name: "Commande de Text",
+          id: 0,
+          name: "Tâche test",
+          femme: "",
+          homme: "",
+          date: "",
+
           completed: false
         }
       ],
       newTodo: "",
+      newDate: "",
       filter: "all"
     };
   },
 
   methods: {
+    completeTodo() {},
     addTodo() {
       this.todos.push({
+        id: this.currentTodoId++,
         completed: false,
         name: this.newTodo
       });
       this.newTodo = "";
     },
     deleteTodo(todo) {
-      alert("z");
-      this.todo = this.filter(i => i !== todo);
+      this.todos = this.todos.filter(i => i !== todo);
     }
   },
   computed: {
@@ -70,17 +79,16 @@ export default {
       }
     },
     remaining() {
-      alert("compteur");
-      return this.todos.filter(todo => !todo.completed).lenght;
+      return this.todos.filter(todo => !todo.completed).length;
     },
-    // hasTodos() {
+    // // hasTodos() {
     //   return this.todos.lenght > 0;
-    // },
+    // // },
     filteredTodos() {
       if (this.filter === "todo") {
-        return this.todos(todo => !todo.completed);
+        return this.todos.filter(todo => !todo.completed);
       } else if (this.filter === "done") {
-        return this.todos(todo => todo.completed);
+        return this.todos.filter(todo => todo.completed);
       }
       return this.todos;
     }
